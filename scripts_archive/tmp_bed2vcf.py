@@ -18,8 +18,8 @@ import pandas as pd
 
 
 def get_vcf(evnt_path: Path,
-            ref_tsv_path: Path,
-            out_evnt_path: Path,
+            #ref_tsv_path: Path,
+            #out_evnt_path: Path,
             out_vcf_tsv_path: Path) -> None:
 
     evnt = pd.read_csv(evnt_path, sep="\t")
@@ -58,8 +58,8 @@ def get_vcf(evnt_path: Path,
 def main():
     ap = argparse.ArgumentParser(description="Create VCF-like TSV from GeneVar evnt + bedtools ref.")
     ap.add_argument("--evnt", required=True, type=Path, help="Input .evnt")
-    ap.add_argument("--ref-tsv", required=True, type=Path, help="bedtools getfasta output TSV")
-    ap.add_argument("--out-evnt", required=True, type=Path, help="Output *_with_ref.evnt")
+    #ap.add_argument("--ref-tsv", required=True, type=Path, help="bedtools getfasta output TSV")
+    #ap.add_argument("--out-evnt", required=True, type=Path, help="Output *_with_ref.evnt")
     ap.add_argument("--out-tsv", required=True, type=Path, help="Output *_as_vcf.tsv")
     args = ap.parse_args()
 
