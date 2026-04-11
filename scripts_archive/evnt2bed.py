@@ -6,8 +6,11 @@ import sys
 
 input_file = sys.argv[1]
 output_file = sys.argv[2]
+input_file = input_file.split('.')[0]
 
 df = pd.read_csv(input_file, sep="\t", dtype=str)
+df = df[~df["Type"].isin(["no_event", "Error"])].copy()]
+df.to_csv(f'{input_file}_filt.evnt')
 
 for col in ["pos", "Length", "LIns"]:
     df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0).astype(int)
