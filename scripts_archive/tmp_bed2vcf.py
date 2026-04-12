@@ -24,13 +24,13 @@ def get_vcf(evnt_path: Path,
 
     evnt = pd.read_csv(evnt_path, sep="\t")
     # mb replace RefSeq with DelSeq - compare what is better
-    #ref = pd.read_csv(ref_tsv_path, sep="\t", names=["chr", "start", "end", "Ref_Seq"])
-    #ref["new_id"] = ref.apply(lambda x: f"{x['chr']}_{x['start']}_{x['end']}", axis=1)
+    ref = pd.read_csv(ref_tsv_path, sep="\t", names=["chr", "start", "end", "Ref_Seq"])
+    ref["new_id"] = ref.apply(lambda x: f"{x['chr']}_{x['start']}_{x['end']}", axis=1)
 
-    #evnt["new_id"] = evnt.apply(
-    #    lambda x: f"{x['Chr']}_{x['pos']}_{x['to']}", axis=1)
+    evnt["new_id"] = evnt.apply(
+        lambda x: f"{x['Chr']}_{x['pos']}_{x['to']}", axis=1)
 
-    #evnt = pd.merge(evnt, ref[["new_id", "Ref_Seq"]], how="inner", on="new_id")
+    evnt = pd.merge(evnt, ref[["new_id", "Ref_Seq"]], how="inner", on="new_id")
 
     evnt["VCF_FORMAT_GT"] = './.' #evnt["Reads"].apply(parse_gt)
     evnt["VCF_POS"] = evnt["pos"] + 1
@@ -48,7 +48,7 @@ def get_vcf(evnt_path: Path,
         evnt["to"].astype(str) + "_" +
         evnt["VCF_INFO_SVTYPE"] + "_")
 
-    vcf_like = evnt[["Chr", "VCF_POS", "VCF_ID", "DelSeq", "InsSeq",
+    vcf_like = evnt[["Chr", "VCF_POS", "VCF_ID", "Ref_Seq", "InsSeq",
         "VCF_QUAL", "VCF_FILTER", "VCF_END", "VCF_INFO_SVLEN",
         "VCF_INFO_SVTYPE","VCF_INFO_AD", "VCF_INFO_FLANKS_ID_PRCNT" ,
         "VCF_FORMAT_GT",  "VCF_FORMAT_DP" ]].copy()
@@ -58,7 +58,7 @@ def get_vcf(evnt_path: Path,
 def main():
     ap = argparse.ArgumentParser(description="Create VCF-like TSV from GeneVar evnt + bedtools ref.")
     ap.add_argument("--evnt", required=True, type=Path, help="Input .evnt")
-    #ap.add_argument("--ref-tsv", required=True, type=Path, help="bedtools getfasta output TSV")
+    ap.add_argument("--ref-tsv", required=True, type=Path, help="bedtools getfasta output TSV")
     #ap.add_argument("--out-evnt", required=True, type=Path, help="Output *_with_ref.evnt")
     ap.add_argument("--out-tsv", required=True, type=Path, help="Output *_as_vcf.tsv")
     args = ap.parse_args()
